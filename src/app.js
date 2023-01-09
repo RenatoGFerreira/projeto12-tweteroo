@@ -24,10 +24,13 @@ server.post("/sign-up", (req, res) => {
 server.post("/tweets", (req, res) => {
     const dados = req.body
     const { username, tweet } = dados
-
-    tweetlist.push(username, tweet)
-    res.send({ menssage: "OK" })
-
+    if (userlist.length === 0) {
+        res.send({menssage: "UNAUTHORIZED"})
+        return
+    }else{   
+        tweetlist.push(username, tweet)
+        res.send({ menssage: "OK" })
+    }
 })
 
 
