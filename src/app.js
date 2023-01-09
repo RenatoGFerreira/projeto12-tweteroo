@@ -23,27 +23,39 @@ server.post("/sign-up", (req, res) => {
 
 server.post("/tweets", (req, res) => {
     const dados = req.body
+    const user = req.headers
     const { username, tweet } = dados
-    if (userlist.length === 0) {
-        res.send({menssage: "UNAUTHORIZED"})
+
+    if (user.length === 0) {
+        res.send({ menssage: "UNAUTHORIZED" })
         return
-    }else{   
+    } else {
         tweetlist.push(username, tweet)
         res.send({ menssage: "OK" })
+        console.log(tweetlist)
     }
 })
-
 
 server.get("/tweets", (req, res) => {
 
     tweetlist.forEach((tweet) => {
-        const { avatar } = userlist.find(user => user.username === tweet.username)
-        tweet.avatar = avatar
+        const objeto = userlist.find((user) => user.username == tweet.username)
+        console.log(objeto)
+        tweet.avatar = objeto.avatar
     })
 
     res.send(tweetlist.slice(tweetlist.length - 10).reverse())
 })
 
+
+server.get("/tweets/:username", (req, res) => {
+
+    const { username } = req.params
+
+    const onlymytweets = tweetlist.filter((tweet) => tweet.username === username)
+
+    res.send(onlymytweets)
+})
 
 server.listen(PORT, () => {
     console.log(`Servidor funcionando normalmente na porta ${PORT}`)
