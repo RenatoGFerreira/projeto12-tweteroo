@@ -34,15 +34,17 @@ server.post("/tweets", (req, res) => {
 server.get("/tweets", (req, res) => {
 
     tweetlist.forEach((tweet) => {
-        const avatar = userlist.find((u) => u.username === tweet.username)
-        console.log(avatar)
+        const { avatar } = userlist.find(user => user.username === tweet.username)
         tweet.avatar = avatar
     })
 
-    res.send(tweetlist)
+    res.send(tweetlist.slice(tweetlist.length - 10).reverse())
 })
 
 
 server.listen(PORT, () => {
     console.log(`Servidor funcionando normalmente na porta ${PORT}`)
 })
+
+
+
