@@ -37,20 +37,16 @@ server.post("/tweets", (req, res) => {
 })
 
 server.get("/tweets", (req, res) => {
-    const ultimostweets = []
 
-    for (let i = 0; i < 10; i++) {
-        if (!tweetlist[i]) return
-        const username = tweetlist[i].username
-        const tweet = tweetlist[i].tweet
-        const userInfo = userlist.find(e => e.username === tweetlist[i].username)
-        const avatar = userInfo.avatar
+    tweetlist.forEach((tweet) => {
+        const objeto = userlist.find((user) => user.username == tweet.username)
+        console.log(objeto)
+        tweet.avatar = objeto.avatar
+    })
 
-        ultimostweets.push({ username: username, avatar: avatar, tweet: tweet })
-    }
-
-    res.send(ultimostweets.reverse());
+    res.send(tweetlist.slice(tweetlist.length - 10).reverse())
 })
+
 
 
 server.get("/tweets/:username", (req, res) => {
