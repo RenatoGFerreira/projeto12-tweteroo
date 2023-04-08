@@ -12,8 +12,17 @@ const tweetList = [];
 app.post("/sign-up", (req, res) => {
   const { username, avatar } = req.body;
 
+  if(typeof username !== "string"){
+    res.status(400).send({error: "Username não pode ser diferente de string."})
+    return
+  }
+  if(typeof avatar !== "string"){
+    res.status(400).send({error: "Avatar não pode ser diferente de string."})
+    return
+  }
+
   if (!username || !avatar) {
-    res.status(400).send({ error: "Preencha todos os campos do formulário" });
+    res.status(400).send({ error: "Preencha todos os campos do formulário." });
     return;
   }
 
@@ -43,6 +52,11 @@ app.post("/tweets", (req, res) => {
     return
   }
 
+  if(typeof tweet !== "string"){
+    res.status(400).send({error: "Tweet não pode ser diferente de string."})
+    return
+  }
+
   tweetList.push({username: user, tweet: tweet})
 
   res.status(201).send({message: "ok"})
@@ -58,6 +72,14 @@ app.get("/tweets", (req, res) => {
   })
 
   res.send(tweetList.slice(-10).reverse())
+})
+
+app.get("/tweets/:username", (req, res) => {
+  const {username} = req.params
+
+  const tweetsUser = tweetList.filter(tweet => tweet.username === username)
+
+  res.status(200).send(tweetsUser.reverse())
 })
 
 
