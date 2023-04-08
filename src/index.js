@@ -34,12 +34,12 @@ app.post("/tweets", (req, res) => {
   const { tweet } = req.body;
 
   if(!user){
-    res.status(400).send({error: "Está faltando user no headers"})
+    res.status(400).send({error: "UNAUTHORIZED"})
     return
   }
 
   if(!tweet){
-    res.status(400).send({error: "Está faltando o tweet no body"})
+    res.status(400).send({error: "UNAUTHORIZED"})
     return
   }
 
@@ -50,8 +50,6 @@ app.post("/tweets", (req, res) => {
 });
 
 
-
-
 app.get("/tweets", (req, res) => {
   tweetList.forEach(tweet => {
     const {avatar} = userList.find(user => user.username === tweet.username) 
@@ -60,8 +58,6 @@ app.get("/tweets", (req, res) => {
   })
 
   res.send(tweetList.slice(-10).reverse())
-
-
 })
 
 
