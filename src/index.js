@@ -42,18 +42,13 @@ app.post("/tweets", (req, res) => {
   const { user } = req.headers;
   const { tweet } = req.body;
 
-  if(!user){
-    res.status(400).send({error: "UNAUTHORIZED"})
-    return
-  }
-
-  if(!tweet){
-    res.status(400).send({error: "UNAUTHORIZED"})
+  if(!user || !tweet){
+    res.status(400).send("UNAUTHORIZED")
     return
   }
 
   if(typeof tweet !== "string"){
-    res.status(400).send({error: "Tweet não pode ser diferente de string."})
+    res.status(400).send("Tweet não pode ser diferente de string.")
     return
   }
 
