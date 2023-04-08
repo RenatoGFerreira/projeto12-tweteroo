@@ -12,13 +12,15 @@ const tweetList = [];
 app.post("/sign-up", (req, res) => {
   const { username, avatar } = req.body;
 
-  if(typeof username !== "string"){
-    res.status(400).send({error: "Username não pode ser diferente de string."})
-    return
+  if (typeof username !== "string") {
+    res
+      .status(400)
+      .send({ error: "Username não pode ser diferente de string." });
+    return;
   }
-  if(typeof avatar !== "string"){
-    res.status(400).send({error: "Avatar não pode ser diferente de string."})
-    return
+  if (typeof avatar !== "string") {
+    res.status(400).send({ error: "Avatar não pode ser diferente de string." });
+    return;
   }
 
   if (!username || !avatar) {
@@ -42,42 +44,44 @@ app.post("/tweets", (req, res) => {
   const { user } = req.headers;
   const { tweet } = req.body;
 
-  if(!user || !tweet){
-    res.status(400).send("UNAUTHORIZED")
-    return
+  if(userList.length === 0){
+    res.status(401).send({message: "UNAUTHORIZED"})
   }
 
-  if(typeof tweet !== "string"){
-    res.status(400).send("Tweet não pode ser diferente de string.")
-    return
+  if (!user || !tweet) {
+    res.status(401).send({ message: "UNAUTHORIZED" });
+    return;
   }
 
-  tweetList.push({username: user, tweet: tweet})
+  if (typeof tweet !== "string") {
+    res.status(400).send("Tweet não pode ser diferente de string.");
+    return;
+  }
 
-  res.status(201).send({message: "ok"})
-  console.log(tweetList)
+  tweetList.push({ username: user, tweet: tweet });
+
+  res.status(201).send({ message: "ok" });
+  console.log(tweetList);
 });
 
-
 app.get("/tweets", (req, res) => {
-  tweetList.forEach(tweet => {
-    const {avatar} = userList.find(user => user.username === tweet.username) 
-    tweet.avatar = avatar
+  tweetList.forEach((tweet) => {
+    const { avatar } = userList.find(
+      (user) => user.username === tweet.username
+    );
+    tweet.avatar = avatar;
+  });
 
-  })
+  res.send(tweetList.slice(-10).reverse());
+});
 
-  res.send(tweetList.slice(-10).reverse())
-})
+app.get("/tweets/:USERNAME", (req, res) => {
+  const { USERNAME } = req.params;
+  console.log(req.params)
+  const tweetsUser = tweetList.filter((tweet) => tweet.username === USERNAME);
 
-app.get("/tweets/:username", (req, res) => {
-  const {username} = req.params
-
-  const tweetsUser = tweetList.filter(tweet => tweet.username === username)
-
-  res.status(200).send(tweetsUser.reverse())
-})
-
-
+  res.status(200).send(tweetsUser.reverse());
+});
 
 
 
