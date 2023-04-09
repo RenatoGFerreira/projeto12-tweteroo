@@ -6,8 +6,43 @@ const PORT = 5000;
 app.use(cors());
 app.use(express.json());
 
-const userList = [];
-const tweetList = [];
+const userList = [
+  {
+    username: "Renato",
+    avatar: "https://avatars.githubusercontent.com/u/73254662?v=4"
+  },
+  {
+    username: 'bobesponja', 
+    avatar: "https://cdn.shopify.com/s/files/1/0150/0643/3380/files/Screen_Shot_2019-07-01_at_11.35.42_AM_370x230@2x.png" 
+  }
+]
+
+const tweetList = [
+  {
+    "username": "Renato",
+    "tweet": "This is a tweet test.",
+  },
+  {
+    "username": "Renato",
+    "tweet": "Impossible its just a opinion",
+  },
+  {
+    "username": "bobesponja",
+    "tweet": "HEHEHEHEEHEEHEHEHE.",
+  },
+  {
+    "username": "Renato",
+    "tweet": "Old movies are better than new movies, change my mind",
+  }, 
+  {
+    "username": "Renato",
+    "tweet": "How can I speak that?",
+  },
+  {
+    "username": "bobesponja",
+    "tweet": "Living in a pineapple its a sweet home.",
+  }
+];
 
 app.post("/sign-up", (req, res) => {
   const { username, avatar } = req.body;
@@ -45,11 +80,11 @@ app.post("/tweets", (req, res) => {
   const { tweet } = req.body;
 
   if(userList.length === 0){
-    res.status(401).send({message: "UNAUTHORIZED"})
+    res.status(400).send({message: "UNAUTHORIZED"})
   }
 
   if (!user || !tweet) {
-    res.status(401).send({ message: "UNAUTHORIZED" });
+    res.status(400).send({ message: "UNAUTHORIZED" });
     return;
   }
 
@@ -82,6 +117,8 @@ app.get("/tweets/:USERNAME", (req, res) => {
 
   res.status(200).send(tweetsUser.reverse());
 });
+
+
 
 
 
